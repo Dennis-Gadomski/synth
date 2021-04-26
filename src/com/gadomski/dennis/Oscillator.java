@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Oscillator extends SynthControlContainer {
     public Random random = new Random();
-    private static final double FREQUENCY = 200;
+    private static final double FREQUENCY = 500;
     private int wavePos;
 
     private WaveForm waveForm = WaveForm.SINE;
@@ -17,7 +17,7 @@ public class Oscillator extends SynthControlContainer {
         super(synth);
         JComboBox<WaveForm> comboBox = new JComboBox<>(new WaveForm[]{WaveForm.SINE, WaveForm.SQUARE, WaveForm.SAV, WaveForm.TRIANGLE, WaveForm.NOISE});
         comboBox.setSelectedItem(WaveForm.SINE);
-        comboBox.setBounds(10, 10, 75, 25);
+        comboBox.setBounds(10, 10, 120, 25);
         comboBox.addItemListener(i -> {
             if(i.getStateChange() == ItemEvent.SELECTED) {
                 waveForm = (WaveForm) i.getItem();
