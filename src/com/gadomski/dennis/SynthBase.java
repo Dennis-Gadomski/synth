@@ -1,12 +1,18 @@
 package com.gadomski.dennis;
 
+import com.gadomski.dennis.utils.Utils;
+
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
 
 public class SynthBase {
+
+    private static final HashMap<Character, Double> KEY_FREQUENCIES = new HashMap<>();
+
     private boolean shouldGenerate;
 
     private final Oscillator[] oscillators = new Oscillator[3];
@@ -35,10 +41,13 @@ public class SynthBase {
         @Override
         public void keyPressed(KeyEvent e) {
             if(!audioThread.isRunning()) {
-                System.out.println("Clicked");
+                for(Oscillator c : oscillators) {
+                    c.setKeyFrequencies(KEY_FREQUENCIES.get(e.getKeyChar()));
+                }
+
                 shouldGenerate = true;
                 audioThread.triggeredPlayback();
-
+                System.out.println("Clicked");
             }
         }
 
@@ -47,6 +56,15 @@ public class SynthBase {
             shouldGenerate = false;
         }
     };
+
+    static {
+        final int STARTING_KEY = 16;
+        final int KEY_FREQUENCY_INCREMENT = 2;
+        final char[] KEYS = "zxcvbnm,./asdfghjkl;'qwertyuiop[]".toCharArray();
+        for (int i = STARTING_KEY, key = 0; i < KEYS.length * KEY_FREQUENCY_INCREMENT + STARTING_KEY; i += KEY_FREQUENCY_INCREMENT, ++key) {
+            KEY_FREQUENCIES.put(KEYS[key], Utils.Math.getKeyFrequency(i));
+        }
+    }
 
     public SynthBase() {
         int y = 0;
